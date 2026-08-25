@@ -1,0 +1,245 @@
+<kendo-grid
+  [data]="gridData()"
+  [loading]="loading()"
+  [pageable]="pagerSettings"
+  [skip]="skip()"
+  [pageSize]="pageSize()"
+  [sortable]="sortSettings"
+  [sort]="kendoSort()"
+  [filterable]="'row'"
+  [filter]="inertFilter"
+  [resizable]="true"
+  (sortChange)="onSortChange($event)"
+  (pageChange)="pageChange.emit($event)"
+>
+  <kendo-grid-column field="chargerName" title="Charger" [width]="165">
+    <ng-template kendoGridFilterCellTemplate>
+      <kendo-dropdownlist
+        class="filter-control"
+        [data]="chargers()"
+        [value]="filterState().charger"
+        [defaultItem]="allChargers"
+        [filterable]="true"
+        [kendoDropDownFilter]="{ operator: 'contains' }"
+        [loading]="chargersLoading()"
+        [popupSettings]="{ width: 'auto' }"
+        title="Filter by charger"
+        (valueChange)="onCharger($event)"
+      ></kendo-dropdownlist>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="chargerLocation" title="Location" [width]="130">
+    <ng-template kendoGridFilterCellTemplate>
+      <kendo-textbox
+        class="filter-control"
+        [value]="filterState().location"
+        [clearButton]="true"
+        placeholder="Location"
+        title="Filter by location"
+        (valueChange)="filterChange.emit({ location: $event ?? '' })"
+      ></kendo-textbox>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="status" title="Status" [width]="150">
+    <ng-template kendoGridFilterCellTemplate>
+      <kendo-dropdownlist
+        class="filter-control"
+        [data]="statuses"
+        [value]="filterState().status"
+        [defaultItem]="allStatuses"
+        title="Filter by status"
+        (valueChange)="onStatus($event)"
+      ></kendo-dropdownlist>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <span class="status status--{{ dataItem.status | lowercase }}">
+        <span class="status__dot"></span>{{ dataItem.status }}
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="startedAt" title="Started" [width]="220">
+    <ng-template kendoGridFilterCellTemplate>
+      <div class="filter-range">
+        <kendo-datepicker
+          class="filter-control"
+          [value]="filterState().startedFrom"
+          placeholder="From"
+          format="dd MMM yyyy"
+          title="Started on or after"
+          (valueChange)="filterChange.emit({ startedFrom: $event })"
+        ></kendo-datepicker>
+        <span class="filter-range__sep" aria-hidden="true">&rarr;</span>
+        <kendo-datepicker
+          class="filter-control"
+          [value]="filterState().startedTo"
+          placeholder="To"
+          format="dd MMM yyyy"
+          title="Started on or before"
+          (valueChange)="filterChange.emit({ startedTo: $event })"
+        ></kendo-datepicker>
+      </div>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.startedAt | date: 'dd MMM yyyy HH:mm' }}
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="durationMinutes"
+    title="Duration"
+    [width]="145"
+  >
+    <ng-template kendoGridFilterCellTemplate>
+      <div class="filter-range">
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().duration.min!"
+          [min]="0"
+          [decimals]="0"
+          [format]="'n0'"
+          [spinners]="false"
+          placeholder="Min"
+          title="Minimum duration in minutes"
+          (valueChange)="onRange('duration', 'min', $event)"
+        ></kendo-numerictextbox>
+        <span class="filter-range__sep" aria-hidden="true">&rarr;</span>
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().duration.max!"
+          [min]="0"
+          [decimals]="0"
+          [format]="'n0'"
+          [spinners]="false"
+          placeholder="Max"
+          title="Maximum duration in minutes"
+          (valueChange)="onRange('duration', 'max', $event)"
+        ></kendo-numerictextbox>
+      </div>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.durationMinutes | duration }}
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="energyKwh"
+    title="Energy"
+    [width]="145"
+  >
+    <ng-template kendoGridFilterCellTemplate>
+      <div class="filter-range">
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().energy.min!"
+          [min]="0"
+          [spinners]="false"
+          placeholder="Min"
+          title="Minimum energy in kWh"
+          (valueChange)="onRange('energy', 'min', $event)"
+        ></kendo-numerictextbox>
+        <span class="filter-range__sep" aria-hidden="true">&rarr;</span>
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().energy.max!"
+          [min]="0"
+          [spinners]="false"
+          placeholder="Max"
+          title="Maximum energy in kWh"
+          (valueChange)="onRange('energy', 'max', $event)"
+        ></kendo-numerictextbox>
+      </div>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.energyKwh | number: '1.1-1' }} kWh
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column
+    field="costEur"
+    title="Cost"
+    [width]="145"
+  >
+    <ng-template kendoGridFilterCellTemplate>
+      <div class="filter-range">
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().cost.min!"
+          [min]="0"
+          [spinners]="false"
+          placeholder="Min"
+          title="Minimum cost in euros"
+          (valueChange)="onRange('cost', 'min', $event)"
+        ></kendo-numerictextbox>
+        <span class="filter-range__sep" aria-hidden="true">&rarr;</span>
+        <kendo-numerictextbox
+          class="filter-control"
+          [value]="filterState().cost.max!"
+          [min]="0"
+          [spinners]="false"
+          placeholder="Max"
+          title="Maximum cost in euros"
+          (valueChange)="onRange('cost', 'max', $event)"
+        ></kendo-numerictextbox>
+      </div>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      &euro; {{ dataItem.costEur | number: '1.2-2' }}
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="user" title="User" [width]="180">
+    <ng-template kendoGridFilterCellTemplate>
+      <kendo-textbox
+        class="filter-control"
+        [value]="filterState().user"
+        [clearButton]="true"
+        placeholder="User"
+        title="Filter by user"
+        (valueChange)="filterChange.emit({ user: $event ?? '' })"
+      ></kendo-textbox>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <span class="user">
+        <span class="user__avatar" aria-hidden="true">{{ dataItem.user.charAt(0) }}</span>
+        <span class="user__name" [title]="dataItem.user">{{ dataItem.user }}</span>
+      </span>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="id" title="Session ID" [width]="150" [sortable]="false">
+    <ng-template kendoGridFilterCellTemplate>
+      <kendo-textbox
+        class="filter-control"
+        [value]="filterState().sessionId"
+        [clearButton]="true"
+        placeholder="Session ID"
+        title="Filter by session ID"
+        (valueChange)="filterChange.emit({ sessionId: $event ?? '' })"
+      ></kendo-textbox>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button
+        type="button"
+        class="session-id"
+        [title]="dataItem.id + ' — click to copy'"
+        (click)="copyId(dataItem.id)"
+      >
+        {{ copiedId() === dataItem.id ? 'Copied!' : dataItem.id.slice(0, 8) + '…' }}
+      </button>
+    </ng-template>
+  </kendo-grid-column>
+
+  <ng-template kendoGridNoRecordsTemplate>
+    @if (!loading() && !failed()) {
+      <div class="no-records">
+        <p>No sessions match these filters</p>
+        <button kendoButton fillMode="flat" themeColor="primary" (click)="clearFilters.emit()">
+          Clear all filters
+        </button>
+      </div>
+    }
+  </ng-template>
+</kendo-grid>

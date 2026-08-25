@@ -1,0 +1,51 @@
+<header class="page-header">
+  <h1>Sessions</h1>
+  <p>Charging session overview — support can locate any session here.</p>
+</header>
+
+<section class="card">
+  @if (sessions.error()) {
+    <div class="banner banner--error" role="alert">
+      <span>Could not load sessions. The request failed.</span>
+      <button kendoButton themeColor="error" fillMode="outline" (click)="retry()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <div class="card__toolbar">
+    <span class="card__count">
+      @if (!sessions.error()) {
+        {{ total() | number }} {{ total() === 1 ? 'session' : 'sessions' }}
+      }
+      @if (activeFilters() > 0) {
+        <span class="card__filters">{{ sessions.error() ? '' : '· ' }}{{ activeFilters() }} filter{{ activeFilters() === 1 ? '' : 's' }} active</span>
+      }
+    </span>
+    <button
+      kendoButton
+      fillMode="flat"
+      [disabled]="activeFilters() === 0"
+      (click)="onClearFilters()"
+    >
+      Clear all filters
+    </button>
+  </div>
+
+  <app-sessions-grid
+    [rows]="rows()"
+    [total]="total()"
+    [loading]="sessions.isLoading()"
+    [failed]="!!sessions.error()"
+    [skip]="skip()"
+    [pageSize]="pageSize()"
+    [sort]="sort()"
+    [filterState]="filterDraft()"
+    [chargers]="chargers.value()"
+    [chargersLoading]="chargers.isLoading()"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (clearFilters)="onClearFilters()"
+  />
+</section>

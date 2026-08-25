@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+
+kendo-grid {
+  border: none;
+  font-size: 0.875rem;
+
+  ::ng-deep .k-grid-header {
+    background: transparent;
+    border-bottom: 1px solid var(--app-border);
+
+    .k-table-th {
+      padding: 1rem 0.75rem;
+      font-weight: 600;
+      color: var(--app-text-strong);
+      border-inline-start-color: transparent;
+    }
+
+    .k-filter-row {
+      background: var(--app-surface-muted);
+
+      .k-table-td {
+        padding: 0.5rem 0.75rem;
+        border-inline-start-color: transparent;
+      }
+    }
+  }
+
+  ::ng-deep .k-pager {
+    justify-content: flex-end;
+
+    .k-pager-info {
+      order: -1; // To accomodate with the design pager order
+      flex: 0 0 auto;
+      justify-content: flex-start;
+      text-align: start;
+      margin-inline-end: 1rem;
+    }
+  }
+}
+
+.filter-control {
+  width: 100%;
+}
+
+.filter-range {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  &__sep {
+    color: var(--app-text-muted);
+  }
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #f1f3f5;
+  color: #5c6672;
+
+  &__dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &--completed {
+    background: #eef2f7;
+    color: #47566b;
+  }
+
+  &--active {
+    background: #e4f8ec;
+    color: #16794a;
+  }
+
+  &--failed {
+    background: #fdeaea;
+    color: #b42318;
+  }
+
+  &--cancelled {
+    background: #f4f2f8;
+    color: #6b5f88;
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__avatar {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #e8eef7;
+    color: #45566d;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.session-id {
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--app-accent);
+    text-decoration: underline;
+  }
+}
+
+.no-records {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: var(--app-text-muted);
+
+  p {
+    margin: 0;
+  }
+}

@@ -1,0 +1,34 @@
+@use "@progress/kendo-theme-default/scss/all.scss" as * with (
+  $kendo-table-alt-row-bg: transparent,
+  $kendo-picker-bg: #fff,
+  $kendo-list-item-selected-bg: transparent, // TODO add more styling for the dropdown lists
+  $kendo-list-item-selected-hover-bg:
+    color-mix(in srgb, var(--kendo-color-on-app-surface, #3d3d3d) 6%, transparent)
+);
+
+$app-font-family: "Inter", Arial, sans-serif;
+
+:root {
+  --app-bg: #f4f7fa;
+  --app-surface-muted: #f8fafc;
+  --app-border: #e4e9f0;
+  --app-text-strong: #1f2d3d;
+  --app-text-muted: #7b8794;
+  --app-accent: #1a73a7;
+  --kendo-font-family: #{$app-font-family};
+  --kendo-color-primary: #1f2d3d;
+  --kendo-color-primary-on-surface: #1f2d3d;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--app-bg);
+  color: var(--app-text-strong);
+  font-family: $app-font-family;
+}
+
+.k-list-item.k-selected {
+  font-weight: 600;
+}
