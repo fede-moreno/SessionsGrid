@@ -5,7 +5,6 @@
 Two components communicating through input and ouput signals, one owner of state:
 - `SessionsPageComponent` (smart) owns the query (filters, sort, paging) as signals and turns it into exactly one backend call via `rxResource`
 - `SessionsGridComponent` (presentational) has columns, custom filter row, cell templates, and the built-in pagination. Stateless
-
 - `src/app/fake/` is left untouched since it is the backend contract
 - Signals for state management, with a derived and writable linkedsignal `skip()` since it must reset the page to 1
 - `OnPush` Change detection strategy to reduce/prevent re-renders. While using signals it also makes it zoneless ready
@@ -28,18 +27,16 @@ Two components communicating through input and ouput signals, one owner of state
 - Currently the grid only supports one column sorting
 - Duration filters in minutes but displays as `6h 49m`, having a dual unit input would be better
 - SessionIds are truncated a tooltip/popup displaying the entire Id would make more sense and the copy button could be 
-- Dropdown lists styles need improvement.
-- Favicon is using a DeftPower hardcoded CDN link which will break eventually
-- Raised the production bundle budget in `angular.json` since the full Kendo theme is quite big
-- Would add better linting (Angular specific and stylelint)
+- Dropdown lists styles need improvement
+- Would add better linting (Angular eslint specific and stylelint)
 - Session filter state is pure and first candidate for adding the tests which is currently out of scope
-- If the Session information and filters would be needed in other parts of the application then an application state (with NgRx) would make more sense than the current signal based implementation
+- If the Session information and filters would be needed in other parts of the application then a global state (with NgRx) would make more sense than the current signal based implementation
 - Add a auto retry (with attempts) mechanism if the (fake) API fails often. Currently its 5%
 - Add custom validators, ex. Min value < Max value
 - NgDeep was used to access to internal Kendo styling. It can probably be improved by applying the styles with more/better specificity
 
 ## AI usage
 
-I made the structural calls: the component split, smart and dumb (also called container/presentational) component pattern, defined the good practices, decided for the state in the page rather than a store or NgRx.
+I made the structural calls: the component split, smart and dumb (also called container/presentational) component pattern, defined the good practices, decided for the state in the page rather than a store NgRx
 Claude Code wrote most of the boilerplate and scaffolding, the filter mappings, URL Queryparam mapper with filter sync, also assisted with KendoUI components research & implementation. 
 Most of my time was focused on challenging AI decisions (specifiying and being clear which part of the code it had to look at) and reviewing the solution
